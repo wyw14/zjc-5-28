@@ -13,6 +13,7 @@
       <span id="hp-text">❤️ 5 / 5</span>
       <span id="score-text">🏆 0</span>
       <span id="progress-text">0 / 50</span>
+      <button id="give-up-btn">放弃</button>
     </div>
 
     <canvas id="game-canvas"></canvas>
@@ -32,6 +33,17 @@
         <h1 id="overlay-title">口算打怪</h1>
         <p id="overlay-msg">消灭怪物，保卫城堡！</p>
         <button id="start-btn">开始游戏</button>
+      </div>
+    </div>
+
+    <div id="confirm-overlay" class="hidden">
+      <div id="confirm-box">
+        <h2 id="confirm-title">确认放弃？</h2>
+        <p id="confirm-msg">放弃后将按当前成绩结算，不能继续答题。</p>
+        <div id="confirm-buttons">
+          <button id="confirm-cancel">取消</button>
+          <button id="confirm-ok">确认放弃</button>
+        </div>
       </div>
     </div>
   </div>

@@ -53,6 +53,34 @@ html, body {
 
 #score-text { margin-left: auto; }
 
+#give-up-btn {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid #c0392b;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #922b21, #641e16);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+#give-up-btn:hover {
+  background: linear-gradient(135deg, #c0392b, #922b21);
+  transform: translateY(-1px);
+}
+
+#give-up-btn:active {
+  transform: translateY(0);
+}
+
+#give-up-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+  transform: none;
+}
+
 #game-canvas {
   flex: 1;
   width: 100%;
@@ -170,3 +198,71 @@ html, body {
 
 #start-btn:hover { transform: scale(1.05); }
 #start-btn:active { transform: scale(0.98); }
+
+#confirm-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+#confirm-overlay.hidden { display: none; }
+
+#confirm-box {
+  text-align: center;
+  background: linear-gradient(135deg, #2a1a1a, #1f0f0f);
+  padding: 30px 40px;
+  border-radius: 16px;
+  border: 2px solid #c0392b;
+  box-shadow: 0 0 30px rgba(192, 57, 43, 0.4);
+  max-width: 380px;
+}
+
+#confirm-box h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #e74c3c;
+}
+
+#confirm-box p {
+  font-size: 14px;
+  color: #bbb;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+#confirm-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+#confirm-cancel, #confirm-ok {
+  padding: 10px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+#confirm-cancel {
+  background: linear-gradient(135deg, #555, #333);
+  color: #eee;
+  border: 1px solid #666;
+}
+
+#confirm-cancel:hover { transform: scale(1.05); }
+#confirm-cancel:active { transform: scale(0.98); }
+
+#confirm-ok {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: #fff;
+}
+
+#confirm-ok:hover { transform: scale(1.05); }
+#confirm-ok:active { transform: scale(0.98); }

@@ -17,6 +17,10 @@ const overlay = document.getElementById('overlay')!;
 const overlayTitle = document.getElementById('overlay-title')!;
 const overlayMsg = document.getElementById('overlay-msg')!;
 const startBtn = document.getElementById('start-btn')!;
+const giveUpBtn = document.getElementById('give-up-btn') as HTMLButtonElement;
+const confirmOverlay = document.getElementById('confirm-overlay')!;
+const confirmCancelBtn = document.getElementById('confirm-cancel')!;
+const confirmOkBtn = document.getElementById('confirm-ok')!;
 
 const MAX_HP = 5;
 let hp = MAX_HP;
@@ -24,6 +28,7 @@ let score = 0;
 let currentIndex = 0;
 let questions: Question[] = [];
 let isLocked = false;
+let isGaveUp = false;
 
 interface Particle { x: number; y: number; vx: number; vy: number; life: number; maxLife: number; color: string; size: number; }
 let particles: Particle[] = [];
@@ -325,7 +330,7 @@ function updateHUD() {
 }
 
 function showQuestion() {
-  if (currentIndex >= questions.length) {
+  if (isGaveUp || currentIndex >= questions.length) {
     endGame();
     return;
   }
@@ -357,11 +362,16 @@ async function fetchQuestions(): Promise<Question[]> {
 
 async function startGame() {
   overlay.classList.add('hidden');
+  confirmOverlay.classList.add('hidden');
   hp = MAX_HP;
   score = 0;
   currentIndex = 0;
+  questions = [];
+  isLocked = false;
+  isGaveUp = false;
   particles = [];
   damageFlash = 0;
+  giveUpBtn.disabled = false;
   initPositions();
   updateHUD();
 
@@ -381,7 +391,11 @@ async function startGame() {
 
 function endGame() {
   overlay.classList.remove('hidden');
-  if (hp <= 0) {
+  giveUpBtn.disabled = true;
+  if (isGaveUp) {
+    overlayTitle.textContent = '🏳️ 已放弃';
+    overlayMsg.textContent = `最终得分：${score}  |  已答：${currentIndex} 题`;
+  } else if (hp <= 0) {
     overlayTitle.textContent = '💀 勇士倒下了';
     overlayMsg.textContent = `最终得分：${score}  |  已答：${currentIndex} 题`;
   } else {
@@ -392,7 +406,7 @@ function endGame() {
 }
 
 function handleAnswer(idx: number) {
-  if (isLocked || currentIndex >= questions.length) return;
+  if (isGaveUp || isLocked || currentIndex >= questions.length) return;
   isLocked = true;
 
   const q = questions[currentIndex];
@@ -442,10 +456,34 @@ function handleAnswer(idx: number) {
   }, correct ? 800 : 1000);
 }
 
+function showConfirm() {
+  if (isGaveUp || isLocked) return;
+  confirmOverlay.classList.remove('hidden');
+}
+
+function hideConfirm() {
+  confirmOverlay.classList.add('hidden');
+}
+
+function confirmGiveUp() {
+  hideConfirm();
+  isGaveUp = true;
+  isLocked = true;
+  optionBtns.forEach(btn => {
+    btn.disabled = true;
+  });
+  endGame();
+}
+
 optionBtns.forEach((btn, i) => {
   btn.addEventListener('click', () => handleAnswer(i));
 });
 
 startBtn.addEventListener('click', startGame);
+giveUpBtn.addEventListener('click', showConfirm);
+confirmCancelBtn.addEventListener('click', hideConfirm);
+confirmOkBtn.addEventListener('click', confirmGiveUp);
+
+giveUpBtn.disabled = true;
 
 gameLoop();
